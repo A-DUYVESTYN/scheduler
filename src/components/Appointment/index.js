@@ -12,7 +12,7 @@ export default function Appointment(props) {
 
     <article className="appointment">
       <Header time={props.time}></Header>
-      {props.interview ? <Show student={props.student} interviewer={props.interview.interviewer}/> : <Empty/>}
+      {props.interview ? <Show student={props.interview.student} interviewer={props.interview.interviewer}/> : <Empty/>}
     </article>
   );
 }
