@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import "components/InterviewerList.scss";
 import InterviewerListItem from "./InterviewerListItem";
 
 export default function InterviewerList(props) {
-    // const [interviewer, setInterviewer] = useState("");
 
   const list = props.interviewers.map(element => 
     <InterviewerListItem 
     key={element.id}
     name={element.name} 
     avatar={element.avatar}
-    selected={element.id === props.value} // differs from code given on compass. value, vs props.value
-    setInterviewer={() => props.onChange(element.id)}  // differs from code given on compass w onChange, vs props.onChange
+    selected={element.id === props.value}
+    setInterviewer={() => props.onChange(element.id)}
     />
   );
 
