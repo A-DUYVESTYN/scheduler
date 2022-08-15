@@ -63,7 +63,7 @@ export default function Application(props) {
   const interviewers = getInterviewersForDay(state, state.day);
 
   const schedule = appointments.map((appointment) => {
-    // why is schedule not used?
+    
     const interview = getInterview(state, appointment.interview);
 
     return (
@@ -72,9 +72,54 @@ export default function Application(props) {
         id={appointment.id}
         time={appointment.time}
         interview={interview}
+        bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
+        interviewers={interviewers}
       />
     );
   });
+
+  function bookInterview(id, interview) {
+    console.log("bookInterview:", id, interview);
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    //  update the database with new appointment. Dont need useEffect to manage this side-effect since it is a single put request, and the user can access it by clicking new booking, fill out form, click save
+    return axios.put(`/api/appointments/${id}`, {interview})
+      .then((res) => {
+        console.log(res)
+        setState({
+          ...state,
+          appointments
+        });
+      })
+      .catch((err) => console.log(err))
+  }
+
+  function cancelInterview(id) {
+    console.log("cancelInterview id:", id);
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    return axios.delete(`/api/appointments/${id}`)
+      .then((res) => {
+        console.log("delete response:", res)
+        setState({...state, appointments})
+      })
+      .catch((err) => console.log(err))
+  };
+
 
   useEffect(() => {
     Promise.all([
@@ -91,7 +136,6 @@ export default function Application(props) {
     });
   }, []);
 
-  // console.log(state.interviewers)
   return (
     <main className="layout">
       <section className="sidebar">
@@ -111,13 +155,7 @@ export default function Application(props) {
         />
       </section>
       <section className="schedule">
-        {appointments.map((appointment) => (
-          <Appointment
-            key={appointment.id}
-            {...appointment}
-            interviewers={interviewers}
-          />
-        ))}
+        {schedule}
         <Appointment key="last" time="5pm" />
       </section>
     </main>
