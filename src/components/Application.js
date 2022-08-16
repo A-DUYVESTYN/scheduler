@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 
 import "components/Application.scss";
 import DayList from "components/DayList";
@@ -59,8 +58,6 @@ export default function Application(props) {
     cancelInterview
   } = useApplicationData();
 
-
-
   // const setDays = days => setState(prev => ({ ...prev, days }));
 
   const appointments = getAppointmentsForDay(state, state.day);
@@ -81,7 +78,6 @@ export default function Application(props) {
       />
     );
   });
-
 
   return (
     <main className="layout">
