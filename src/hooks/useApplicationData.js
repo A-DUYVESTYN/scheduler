@@ -12,10 +12,8 @@ export default function useApplicationData () {
   });
   const setDay = (day) => setState({ ...state, day });
 
-
   function updateSpots(newState) {
-    // console.log("state:", newState)
-   
+
     let spotsleft = 0
     for (const appt of getAppointmentsForDay(newState, newState.day)) {
       if (!appt.interview) {spotsleft++}
@@ -25,15 +23,11 @@ export default function useApplicationData () {
     for (let i = 0; i < DaysArr.length; i++) {
       if (DaysArr[i].name === newState.day) {DaysArr[i].spots = spotsleft}
     };
-    // alternatively use days.findIndex(d => d.name === state.day) and then replace the object @ the found index
-    // 2nd alternative: use const DaysArr = state.days.map(d => d.name === state.day ? newDay : d)
-    // console.log(`spots left on ${newState.day} based on state.appontments= `, spotsleft)
-
+    // alternative: use const DaysArr = state.days.map(d => d.name === state.day ? newDay : d)
     return DaysArr;
   };
 
   function bookInterview(id, interview) {
-    // console.log("bookInterview:", id, interview);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -42,20 +36,17 @@ export default function useApplicationData () {
       ...state.appointments,
       [id]: appointment
     };
-    //  update the database with new appointment. Dont need useEffect to manage this side-effect since it's a single put request, and the user can only access it by clicking new booking, fill out form, click save
-    return axios.put(`/api/appointments/${id}`, {interview})
-      .then((res) => {
-        // console.log("PUT response:", res)
 
-        // call fn that takes in a newState and returns a revised days array with the correct # of spots in state.days.[currentdayID].spots
+    return axios.put(`/api/appointments/${id}`, {interview})
+      .then(() => {
+        // call function that takes in a newState and returns a revised days array with the correct # of spots in state.days.[currentdayID].spots
         const newDays = updateSpots({...state, appointments})
-        //setState with revised properties for appointments and days (i.e. spots) 
+        //setState with revised properties for appointments and days (i.e. updated spots remaining) 
         setState({...state, appointments, newDays});
       })
   }
 
   function cancelInterview(id) {
-    // console.log("cancelInterview id:", id);
     const appointment = {
       ...state.appointments[id],
       interview: null
@@ -67,12 +58,10 @@ export default function useApplicationData () {
 
     return axios.delete(`/api/appointments/${id}`)
       .then((res) => {
-        // console.log("DELETE response:", res)
         const newDays = updateSpots({...state, appointments})
         setState({...state, appointments, newDays})
       })
   };
-
 
   useEffect(() => {
     Promise.all([
@@ -88,7 +77,6 @@ export default function useApplicationData () {
       }));
     });
   }, []);
-
 
   return {
     state,

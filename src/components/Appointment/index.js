@@ -20,7 +20,7 @@ const ERROR_DELETE = "ERROR_DELETE";
 const ERROR_SAVE = "ERROR_SAVE";
 
 export default function Appointment(props) {
-  // if there is an interview, use SHOW mode, use EMPTY mode to display a gap in the schedule. useVisualMode returns the mode state, and the two functions
+  // if there is an interview, use SHOW mode, otherwise, use EMPTY mode to display a gap in the schedule. useVisualMode returns the mode state, and two functions for moving between states
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
@@ -28,15 +28,16 @@ export default function Appointment(props) {
   function save(name, interviewer) {
     const interview = {
       student: name,
-      interviewer: interviewer.id  // changed from how it was shown on compass. Here, interviewer is the entire interviewer object. The API expects only the interviewer's id as an int.
+      // this implementation differs from how it is done on compass. Here, the const interviewer is the entire interviewer object, rather than the id. The API expects only the interviewer's id as an integer.
+      interviewer: interviewer.id  
     };
     transition(SAVING);
     props.bookInterview(props.id, interview)
-      .then (() => {
+      .then(() => {
         transition(SHOW);
       })
-      .catch ((err) => {
-        console.log(err)
+      .catch((err) => {
+        console.log("Error message on save:", err)
         transition(ERROR_SAVE, true)
       })
   }
@@ -47,8 +48,8 @@ export default function Appointment(props) {
       .then(() => {
         transition(EMPTY)
       })
-      .catch ((err) => {
-        console.log(err)
+      .catch((err) => {
+        console.log("Error message on delete:", err)
         transition(ERROR_DELETE, true)
       })
   }
@@ -81,16 +82,16 @@ export default function Appointment(props) {
           interviewer={props.interview.interviewer}
         />
       )}
-      {mode === SAVING && <Status message="Saving"/>}
-      {mode === DELETING && <Status message="Deleting :("/>}
-      {mode === CONFIRM && 
-        <Confirm 
+      {mode === SAVING && <Status message="Saving" />}
+      {mode === DELETING && <Status message="Deleting :(" />}
+      {mode === CONFIRM &&
+        <Confirm
           message="Are you sure you wish to delete?"
           onCancel={() => transition(SHOW)}
-          onConfirm={deleteInterview}/>}
+          onConfirm={deleteInterview} />}
 
-      {mode === ERROR_SAVE && <Error message ="Could not save appointment" onClose={back}/>}
-      {mode === ERROR_DELETE && <Error message ="Could not delete appointment" onClose={back}/>}
+      {mode === ERROR_SAVE && <Error message="Could not save appointment" onClose={back} />}
+      {mode === ERROR_DELETE && <Error message="Could not delete appointment" onClose={back} />}
     </article>
   );
 }

@@ -3,10 +3,11 @@ import Button from "components/Button";
 import InterviewerList from "components/InterviewerList";
 
 export default function Form(props) {
-  const [student, setStudent] = useState(props.student || ""); //NOTE COMPASS USES "name", I used "student" state
+  const [student, setStudent] = useState(props.student || ""); 
+  //NOTE Compass uses the "name" prop, this app uses "student" prop
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
   const [error, setError] = useState("");
-  // console.log("props in Form: ", props)
+  
   const reset = () => {
     setStudent("");
     setInterviewer(null);
