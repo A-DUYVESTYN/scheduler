@@ -8,6 +8,10 @@ The user has the option to book, edit, and cancel interviews.
 - The client application communicates with an API server over HTTP, using the JSON format.
 - Jest tests are used through the development of the project.
 
+## Screenshots
+
+![Booking an interview](https://github.com/A-DUYVESTYN/scheduler/blob/master/docs/scheduler_appointment-form.png?raw=true)
+
 ## Setup
 
 Install dependencies with `npm install`.
