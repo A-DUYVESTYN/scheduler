@@ -50,7 +50,6 @@ export default function useApplicationData () {
     for (let i = 0; i < DaysArr.length; i++) {
       if (DaysArr[i].name === newState.day) {DaysArr[i].spots = spotsleft}
     };
-    // alternative: use const DaysArr = state.days.map(d => d.name === state.day ? newDay : d)
     return DaysArr;
   };
 
@@ -63,7 +62,6 @@ export default function useApplicationData () {
       ...state.appointments,
       [id]: appointment
     };
-
     return axios.put(`/api/appointments/${id}`, {interview})
       .then(() => {
         // call function that takes in a newState and returns a revised days array with the correct # of spots in state.days.[currentdayID].spots
@@ -102,7 +100,6 @@ export default function useApplicationData () {
     ]).then((res) => {
       const days = res[0].data
       const appointments = res[1].data
-      console.log("appointments = res[1].data :",appointments)
       const interviewers = res[2].data
       dispatch({ type: SET_APPLICATION_DATA, days, appointments, interviewers });
 
