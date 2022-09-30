@@ -65,7 +65,7 @@ export default function useApplicationData () {
     return axios.put(`/api/appointments/${id}`, {interview})
       .then(() => {
         // call function that takes in a newState and returns a revised days array with the correct # of spots in state.days.[currentdayID].spots
-        const newDays = updateSpots({...state, appointments})
+        updateSpots({...state, appointments})
         //setState with revised properties for appointments and days (i.e. updated spots remaining) 
 
         // setState({...state, appointments, newDays});
@@ -85,7 +85,7 @@ export default function useApplicationData () {
 
     return axios.delete(`/api/appointments/${id}`)
       .then((res) => {
-        const newDays = updateSpots({...state, appointments})
+        updateSpots({...state, appointments})
 
         // setState({...state, appointments, newDays})
         dispatch({ type: SET_INTERVIEW, appointments });
